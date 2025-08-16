@@ -1,12 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { Form, Link } from "react-router";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "react-router";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
 
 const registerSchema = z
   .object({
@@ -17,10 +27,10 @@ const registerSchema = z
       })
       .max(50),
     email: z.email(),
-    password: z.string().min(8, { error: "Password is too short" }),
+    password: z.string().min(6, { error: "Password is too short" }),
     confirmPassword: z
       .string()
-      .min(8, { error: "Confirm Password is too short" }),
+      .min(6, { error: "Confirm Password is too short" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -31,7 +41,8 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  //const [register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -44,20 +55,20 @@ export function RegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    // const userInfo = {
-    //   name: data.name,
-    //   email: data.email,
-    //   password: data.password,
-    // };
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
 
-    // try {
-    //   const result = await register(userInfo).unwrap();
-    //   console.log(result);
-    //   toast.success("User created successfully");
-    // } catch (error) {
-    //   console.error(error);
-    // }
-    console.log(data);
+    try {
+      const result = await register(userInfo).unwrap();
+      console.log(result);
+      toast.success("User created successfully");
+      navigate("/verify");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
