@@ -8,19 +8,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dot } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
 const FormSchema = z.object({
     pin: z.string().length(6, "OTP must be 6 digits"),
-    message: "Your OTP must be 6 digits.",
+    message: z.string().optional(), 
 })
 
 export default function Verify() {
 
     const location = useLocation();
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const [email] = useState(location.state);
     const [confirmed, setConfirmed] = useState(false);
     const [sendOtp] = useSendOtpMutation()
@@ -64,6 +64,7 @@ export default function Verify() {
             const res = await verifyOtp(userInfo).unwrap();
             if (res.success) {
             toast.success("OTP Verified", { id: toastId });
+            navigate("/login");
             setConfirmed(true);
             }
         } catch (err) {
