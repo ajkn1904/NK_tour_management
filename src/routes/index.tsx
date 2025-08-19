@@ -9,6 +9,9 @@ import { adminSidebarItems } from "./adminSidebarItems";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { userSidebarItems } from "./userSidebarItems";
 import Unauthorized from "@/pages/Unauthorized";
+import { withAuth } from "@/utils/withAuth";
+import { role } from "@/constants/role";
+import type { TRole } from "@/types";
 
 export const router = createBrowserRouter([
     {
@@ -36,7 +39,7 @@ export const router = createBrowserRouter([
     },
 
     {
-        Component: DashboardLayout,
+        Component: withAuth(DashboardLayout, (role.superAdmin || role.admin) as TRole),
         path: "/admin",
         children: [
             {index: true, element: <Navigate to="/admin/analytics" />},
@@ -44,7 +47,7 @@ export const router = createBrowserRouter([
         ]
     },
     {
-        Component: DashboardLayout,
+        Component: withAuth(DashboardLayout, role.user as TRole),
         path: "/user",
         children: [
             {index: true, element: <Navigate to="/user/bookings" />},
