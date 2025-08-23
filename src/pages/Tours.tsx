@@ -1,3 +1,4 @@
+import TourFilters from "@/components/modules/Tours/TourFilters";
 import { Button } from "@/components/ui/button";
 import { useGetAllToursQuery } from "@/redux/features/Tour/tour.api";
 import { Link, useSearchParams } from "react-router";
@@ -13,10 +14,8 @@ export default function Tours() {
     return (
         <div className="container mx-auto px-5 py-8 grid grid-cols-12 gap-5">
 
-            {/* 
+             <TourFilters />
 
-            */}
-            
             <div className="col-span-9 w-full">
 
 
