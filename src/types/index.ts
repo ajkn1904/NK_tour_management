@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 
-export type {ISendOTP, IVerifyOTP, ILogin} from './auth.type';
+export type {ISendOTP, IVerifyOTP, ILogin} from './auth.type'
+export type {ITourPackage} from './tour.type';
 
 //generic types
 export interface IResponse<T> {
