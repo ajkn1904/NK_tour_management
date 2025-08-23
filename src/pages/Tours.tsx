@@ -12,8 +12,8 @@ export default function Tours() {
     const tourType = searchParams.get("tourType") || undefined;
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [limit, setLimit] = useState(5);
-
+    //const [limit, setLimit] = useState(5);
+    const limit = 5;
     
     const { data } = useGetAllToursQuery({ division, tourType, page: currentPage, limit });
     const totalPage = Math.ceil(data!?.length /2) || 1;

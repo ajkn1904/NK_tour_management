@@ -19,6 +19,10 @@ export default function HeroSection() {
       value: item._id,
     })
   );
+  
+    if (divisionIsLoading) {
+        return <p>Loading...</p>;
+    }
 
   return (
     <section className="relative overflow-hidden py-32 min-h-screen">
